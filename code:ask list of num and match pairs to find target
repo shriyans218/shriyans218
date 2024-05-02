@@ -1,0 +1,19 @@
+import sys
+num=int(input('Enter total num'))
+list=[]
+for i in range(num):
+    val=int(input('Enter numbers'))
+    list.append(val)
+tar=int(input('Enter the num whose sum to be achieved'))
+j=0
+k=0
+while True:
+ for elem in list:
+          if(list[k]+list[j]==tar):
+             print(str(list[k]) +'and'+str(list[j]))
+             sys.exit()
+          else:
+             j+=1
+             if(j>=num):
+              j=0
+              k+=1         
