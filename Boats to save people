@@ -1,0 +1,23 @@
+num=int(input('Enter total num: '))
+people=[]
+for i in range(num):
+    val=int(input('Enter weight of people: '))
+    people.append(val)
+limit=int(input('Enter the limit weight of boat: '))
+j=0
+k=0
+h=0
+while True:
+ for elem in people:
+          if(people[k]+people[j]==limit ):
+             #print(str(list[k]) +'and'+str(list[j]))
+             h+=1
+             j+=1
+             if(j>=num):
+              j=0
+              k+=1
+          #elif(people[k]and people[j]<=limit):
+          #    h+=1
+ break
+
+print('The number of boats required with weight limit '+str(limit)+' is: '+str(h))
