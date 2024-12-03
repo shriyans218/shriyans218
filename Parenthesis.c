@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Define the stack structure
 struct stack {
@@ -72,7 +73,10 @@ int parenthesisMatch(char *exp) {
 
 // Main function
 int main() {
-    char *exp = "((8)(*--$$9)";
+    char exp[100]; // Allocate memory for the expression
+    printf("Enter the expression: ");
+    fgets(exp, 100, stdin); // Safely read the expression
+    exp[strcspn(exp, "\n")] = 0; // Remove the newline character if present
 
     if (parenthesisMatch(exp)) {
         printf("The parenthesis is matching\n");
