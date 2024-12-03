@@ -1,97 +1,84 @@
 #include <stdio.h>
 #include <stdlib.h>
- 
-struct stack
-{
+
+// Define the stack structure
+struct stack {
     int size;
     int top;
     char *arr;
 };
- 
-int isEmpty(struct stack *ptr)
-{
-    if (ptr->top == -1)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+
+// Check if the stack is empty
+int isEmpty(struct stack *ptr) {
+    return ptr->top == -1;
 }
- 
-int isFull(struct stack *ptr)
-{
-    if (ptr->top == ptr->size - 1)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+
+// Check if the stack is full
+int isFull(struct stack *ptr) {
+    return ptr->top == ptr->size - 1;
 }
- 
-void push(struct stack* ptr, char val){
-    if(isFull(ptr)){
-        printf("Stack Overflow! Cannot push %d to the stack\n", val);
-    }
-    else{
+
+// Push an element onto the stack
+void push(struct stack *ptr, char val) {
+    if (isFull(ptr)) {
+        printf("Stack Overflow! Cannot push %c to the stack\n", val);
+    } else {
         ptr->top++;
         ptr->arr[ptr->top] = val;
     }
 }
- 
-char pop(struct stack* ptr){
-    if(isEmpty(ptr)){
+
+// Pop an element from the stack
+char pop(struct stack *ptr) {
+    if (isEmpty(ptr)) {
         printf("Stack Underflow! Cannot pop from the stack\n");
         return -1;
-    }
-    else{
+    } else {
         char val = ptr->arr[ptr->top];
         ptr->top--;
         return val;
     }
 }
- 
-int parenthesisMatch(char * exp){
+
+// Function to check if the parentheses in an expression are balanced
+int parenthesisMatch(char *exp) {
     // Create and initialize the stack
-    struct stack* sp;
+    struct stack *sp = (struct stack *)malloc(sizeof(struct stack));
     sp->size = 100;
     sp->top = -1;
     sp->arr = (char *)malloc(sp->size * sizeof(char));
- 
- 
-    for (int i = 0; exp[i]!='\0'; i++)
-    {
-        if(exp[i]=='('){
+
+    for (int i = 0; exp[i] != '\0'; i++) {
+        if (exp[i] == '(') {
             push(sp, '(');
-        }
-        else if(exp[i]==')'){
-            if(isEmpty(sp)){
+        } else if (exp[i] == ')') {
+            if (isEmpty(sp)) {
+                // Free allocated memory before returning
+                free(sp->arr);
+                free(sp);
                 return 0;
             }
-            pop(sp); 
+            pop(sp);
         }
     }
- 
-    if(isEmpty(sp)){
-        return 1;
-    }
-    else{
-        return 0;
-    }
-    
+
+    int isBalanced = isEmpty(sp);
+    // Free allocated memory
+    free(sp->arr);
+    free(sp);
+
+    return isBalanced;
 }
-int main()
-{
-    char * exp = "((8)(*--$$9))";
-    // Check if stack is empty
-    if(parenthesisMatch(exp)){
-        printf("The parenthesis is matching");
+
+// Main function
+int main() {
+    char *exp = "((8)(*--$$9)";
+
+    if (parenthesisMatch(exp)) {
+        printf("The parenthesis is matching\n");
+    } else {
+        printf("The parenthesis is not matching\n");
     }
-    else{
-        printf("The parenthesis is not matching");
-    }
+
     return 0;
 }
