@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define the stack structure
+struct stack {
+    int size;
+    int top;
+    char *arr;
+};
+
+// Check if the stack is empty
+int isEmpty(struct stack *ptr) {
+    return ptr->top == -1;
+}
+
+// Push an element onto the stack
+void push(struct stack *ptr, char val) {
+    ptr->top++;
+    ptr->arr[ptr->top] = val;
+}
+
+// Pop an element from the stack
+char pop(struct stack *ptr) {
+    char val = ptr->arr[ptr->top];
+    ptr->top--;
+    return val;
+}
+
+// Function to check if the parentheses in the code are balanced
+int parenthesisMatch(char *code) {
+    // Create and initialize the stack
+    struct stack *sp = (struct stack *)malloc(sizeof(struct stack));
+    sp->size = 1000; // Large enough to handle code blocks
+    sp->top = -1;
+    sp->arr = (char *)malloc(sp->size * sizeof(char));
+
+    for (int i = 0; code[i] != '\0'; i++) {
+        if (code[i] == '(') {
+            push(sp, '(');
+        } else if (code[i] == ')') {
+            if (isEmpty(sp)) {
+                // Free allocated memory before returning
+                free(sp->arr);
+                free(sp);
+                return 0; // Unmatched closing parenthesis
+            }
+            pop(sp);
+        }
+    }
+
+    int isBalanced = isEmpty(sp); // Stack should be empty if balanced
+    // Free allocated memory
+    free(sp->arr);
+    free(sp);
+
+    return isBalanced;
+}
+
+// Main function
+int main() {
+    char code[1000]; // Allocate memory for the code input
+    printf("Enter the code snippet (end with ~ on a new line):\n");
+
+    char line[200];
+    code[0] = '\0'; // Initialize code as an empty string
+
+    // Read multi-line input until "~" is entered
+    while (1) {
+        fgets(line, sizeof(line), stdin);
+        if (line[0] == '~' && line[1] == '\n') break; // End of input
+        strcat(code, line); // Append each line to the code string
+    }
+
+    if (parenthesisMatch(code)) {
+        printf("The parentheses in the code are balanced.\n");
+    } else {
+        printf("The parentheses in the code are not balanced.\n");
+    }
+
+    return 0;
+}
